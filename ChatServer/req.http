@@ -1,0 +1,2 @@
+###
+POST localhost:8080/sse/chat-watch?userId=2&text=I%20am%20user%202
