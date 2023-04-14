@@ -16,7 +16,7 @@ public class SseClientEventSourceApplication2 {
                 try {
                     while (true) {
                         System.out.println("Initialize event source");
-                        String url = "http://localhost:8080/sse/chat-watch";
+                        String url = "http://localhost:8080/ChatServer/sse/chat-watch";
                         EventSource.Builder builder = new EventSource.Builder(new EventHandler() {
 
                             @Override
