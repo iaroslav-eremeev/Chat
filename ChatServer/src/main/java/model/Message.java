@@ -1,66 +1,50 @@
 package model;
 
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import repository.MessageRepository;
 
 import java.util.Objects;
 
+@Entity
+@Table(name = "messages")
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class Message {
-    private int messageId;
-    private int userId;
+
+    @Id
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    @Column(name = "message_id")
+    private long messageId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(name = "text")
     private String text;
-
-    public Message() {
-    }
-
-    public Message(int userId, String text, MessageRepository messageRepository) {
-        // Get the next message id from the database
-        this.messageId = messageRepository.getLength() + 1;
-        this.userId = userId;
-        this.text = text;
-    }
-
-    public int getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(int messageId) {
-        this.messageId = messageId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Message message = (Message) o;
-        return messageId == message.messageId && userId == message.userId && Objects.equals(text, message.text);
+        return messageId == message.messageId && Objects.equals(user, message.user) && Objects.equals(text, message.text);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(messageId, userId, text);
+        return Objects.hash(messageId, user, text);
     }
 
     @Override
     public String toString() {
         return "Message{" +
                 "messageId=" + messageId +
-                ", userId=" + userId +
+                ", user=" + user +
                 ", text='" + text + '\'' +
                 '}';
     }
