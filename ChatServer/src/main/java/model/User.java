@@ -2,10 +2,7 @@ package model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.Objects;
 import java.util.ArrayList;
@@ -49,7 +46,7 @@ public class User {
         return "User{" +
                 "userId=" + userId +
                 ", name='" + name + '\'' +
-                ", messages=" + messages +
+                ", messages=" + messages.size() +
                 '}';
     }
 }

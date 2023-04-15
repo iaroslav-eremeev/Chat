@@ -1,7 +1,9 @@
 package servlets;
 
 
+import hibernate.DAO;
 import model.Message;
+import model.User;
 import repository.SSEEmittersRepository;
 import service.ChatWatchService;
 
@@ -44,8 +46,9 @@ public class MessageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         String userId = req.getParameter("userId");
         String text = req.getParameter("text");
-
-        Message message = new Message(Integer.parseInt(userId), text);
+        User user = (User) DAO.getObjectById(Integer.parseInt(userId), User.class);
+        DAO.closeOpenedSession();
+        Message message = new Message(user, text);
         this.service.addMessage(message);
     }
 }

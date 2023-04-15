@@ -1,10 +1,7 @@
 package model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.Objects;
 
@@ -46,7 +43,7 @@ public class Message {
     public String toString() {
         return "Message{" +
                 "messageId=" + messageId +
-                ", user=" + user +
+                ", user=" + user.getName() +
                 ", text='" + text + '\'' +
                 '}';
     }
