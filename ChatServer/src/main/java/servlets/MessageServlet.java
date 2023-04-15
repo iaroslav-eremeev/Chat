@@ -2,7 +2,6 @@ package servlets;
 
 
 import model.Message;
-import repository.MessageRepository;
 import repository.SSEEmittersRepository;
 import service.ChatWatchService;
 
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 public class MessageServlet extends HttpServlet {
     private SSEEmittersRepository emitters = new SSEEmittersRepository();
     private ChatWatchService service;
-    private MessageRepository messageRepository = new MessageRepository();
 
     @Override
     public void init() {
@@ -46,8 +44,8 @@ public class MessageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         String userId = req.getParameter("userId");
         String text = req.getParameter("text");
-        Message message = new Message(Integer.parseInt(userId), text, this.messageRepository);
-        this.messageRepository.add(message);
+
+        Message message = new Message(Integer.parseInt(userId), text);
         this.service.addMessage(message);
     }
 }

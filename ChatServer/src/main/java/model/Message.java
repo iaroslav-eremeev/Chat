@@ -3,8 +3,8 @@ package model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import repository.MessageRepository;
 
 import java.util.Objects;
 
@@ -22,9 +22,11 @@ public class Message {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @NonNull
     private User user;
 
     @Column(name = "text")
+    @NonNull
     private String text;
 
     @Override
