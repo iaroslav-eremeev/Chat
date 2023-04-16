@@ -20,9 +20,19 @@ public class User {
     @Column(name = "user_id")
     private long userId;
 
+    @Column(name = "login")
+    @NonNull
+    private String login;
+
+    @Column(name = "passwordHash")
+    @NonNull
+    private String passwordHash;
+
     @Column(name = "name")
     @NonNull
     private String name;
+
+    private String hash;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
