@@ -38,8 +38,8 @@ public class ChatWatchService {
             try {
                 while (true) {
                     Message message = messageBlockingQueue.take();
-                    System.out.println("Start sending\n" + repository.getList());
-                    for (AsyncContext asyncContext : repository.getList()) {
+                    System.out.println("Start sending\n" + repository.getEmittersList());
+                    for (AsyncContext asyncContext : repository.getEmittersList()) {
                         try {
                             sendMessage(asyncContext.getResponse().getWriter(), message);
                         } catch (IOException e) {
