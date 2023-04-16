@@ -15,7 +15,7 @@ import java.io.IOException;
 @WebServlet("/login")
 public class UserServlet extends HttpServlet {
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         UnicodeSetup.setUnicode(req, resp);
         String login = req.getParameter("login");
         String password = req.getParameter("password");
@@ -44,30 +44,6 @@ public class UserServlet extends HttpServlet {
         }
         else {
             System.out.println("Login or password are incorrect");
-        }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Unicode.setUnicode(req, resp);
-        resp.setContentType("application/json");
-        try {
-            resp.getWriter().write(new Gson().toJson(DAO.getAllObjects(User.class)));
-        } catch (Exception e) {
-            resp.setStatus(200);
-        }
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Unicode.setUnicode(req, resp);
-        String id = req.getParameter("id");
-        if (id != null) {
-            try {
-                DAO.deleteObjectById(Math.toIntExact(Long.parseLong(id)), User.class);
-            } catch (Exception e) {
-                resp.setStatus(200);
-            }
         }
     }
 }

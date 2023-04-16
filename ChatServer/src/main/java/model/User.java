@@ -24,9 +24,9 @@ public class User {
     @NonNull
     private String login;
 
-    @Column(name = "passwordHash")
+    @Column(name = "password")
     @NonNull
-    private String passwordHash;
+    private String password;
 
     @Column(name = "name")
     @NonNull
@@ -43,18 +43,19 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return userId == user.userId && name.equals(user.name) && Objects.equals(messages, user.messages);
+        return userId == user.userId && login.equals(user.login) && password.equals(user.password) && name.equals(user.name) && Objects.equals(hash, user.hash) && Objects.equals(messages, user.messages);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, name, messages);
+        return Objects.hash(userId, login, password, name, hash, messages);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "userId=" + userId +
+                ", login='" + login + '\'' +
                 ", name='" + name + '\'' +
                 ", messages=" + messages.size() +
                 '}';
