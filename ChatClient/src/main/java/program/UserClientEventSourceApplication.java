@@ -15,13 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class UserClientEventSourceApplication {
     private static final String SSE_CHAT_WATCH_URL = "http://localhost:8080/ChatServer/sse/chat-watch";
 
-    public static void main(String[] args) throws InterruptedException, IOException {
-        User user = login("iaroslav", "eremeev");
-        if (user == null) {
-            System.out.println("Login failed");
-            return;
-        }
-        System.out.println("Login successful. User: " + user.getLogin());
+    public static void main(String[] args) throws InterruptedException {
         // Start SSE event source
         EventHandler eventHandler = new SimpleEventHandler();
         EventSource.Builder builder = new EventSource.Builder(eventHandler, URI.create(SSE_CHAT_WATCH_URL));
@@ -34,19 +28,5 @@ public class UserClientEventSourceApplication {
         }
     }
 
-    private static User login(String username, String password) {
-        try {
-            User user = (User) DAO.getObjectByParams(new String[]{"login", "password"}, new Object[]{username, password}, User.class);
-            DAO.closeOpenedSession();
-            if (user != null) {
-                String hash = Encryption.generateHash();
-                user.setHash(hash);
-                DAO.updateObject(user);
-                return user;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 }

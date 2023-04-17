@@ -30,6 +30,11 @@ public class UserServlet extends HttpServlet {
                     cookie.setMaxAge(30 * 60);
                     cookie.setPath("/");
                     resp.addCookie(cookie);
+                    // Save userId in the second cookie
+                    Cookie userIdCookie = new Cookie("userId", String.valueOf(user.getUserId()));
+                    userIdCookie.setMaxAge(30 * 60);
+                    userIdCookie.setPath("/");
+                    resp.addCookie(userIdCookie);
                 }
                 else{
                     resp.setStatus(400);
