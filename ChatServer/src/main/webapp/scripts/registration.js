@@ -8,12 +8,14 @@ $('#btn-sign-up').click(function () {
         $.ajax({
             url: 'registration',
             method: "POST",
-            data: {"login" : $('#login').val(), "password" : $('#password').val()},
+            data: {"login" : $('#login').val(),
+                "name" : $('#name').val(),
+                "password" : $('#password').val()},
             success: [function (data) {
                 $('.popup-fade').fadeIn();
             }],
-            error: [function () {
-                alert("This login is already taken!");
+            error: [function (xhr, status, error) {
+                alert(xhr.responseText);
             }]
         })
     }
