@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/*@WebFilter("/*")
+@WebFilter("/*")
 public class AuthorizationFilter implements Filter {
 
     @Override
@@ -22,6 +22,11 @@ public class AuthorizationFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
+
+        if(request.getRequestURI().endsWith("index.html")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         Cookie[] cookies = request.getCookies();
         String value = null;
@@ -35,17 +40,17 @@ public class AuthorizationFilter implements Filter {
 
         System.out.println(request.getRequestURI());
 
-        //URL Запроса/переадресации на Servlet входа
+        // Request/Redirect URL to Login Servlet
         String loginURI = request.getContextPath() + "/login";
         String registerURI = request.getContextPath() + "/registration";
-        //Если сессия ранее создана
+        // If the session was previously created
         boolean loginRequest = request.getRequestURI().contains(loginURI);
         boolean registerRequest = request.getRequestURI().contains(registerURI);
-        //Если запрос пришел со страницы с входом или сессия не пуста даем добро следовать дальше
-        //Если нет ридерект на страницу входа
+        // If the request came from the login page or the session is not empty, we give the go-ahead to proceed further
         if (request.getRequestURI().endsWith("js") || loginRequest || registerRequest
                 || value != null && DAO.getObjectByParam("hash", value, User.class) != null) {
             filterChain.doFilter(request, response);
+        // If not redirect to login page
         } else {
             response.sendRedirect(loginURI + ".html");
         }
@@ -55,4 +60,4 @@ public class AuthorizationFilter implements Filter {
     public void destroy() {
 
     }
-}*/
+}
