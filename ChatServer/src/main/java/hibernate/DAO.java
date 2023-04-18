@@ -36,17 +36,7 @@ public class DAO {
         return obj;
     }
 
-    /*// LAZY loading: use closeOpenedSession() after each method call
-    public static Object getObjectByParam(String prm, Object prmO, Class className) {
-        Session session = HibernateUtil.getSession1();
-        session.beginTransaction();
-        Object obj = session.createCriteria(className).
-                add(Restrictions.eq(prm, prmO)).uniqueResult();
-        openedSession = session;
-        session.getTransaction().commit();
-        return obj;
-    }*/
-
+    // LAZY loading: use closeOpenedSession() after each method call
     public static Object getObjectByParam(String prm, Object prmO, Class className) {
         Session session = HibernateUtil.getSession1();
         session.beginTransaction();
@@ -60,19 +50,7 @@ public class DAO {
         return obj;
     }
 
-    /*// LAZY loading: use closeOpenedSession() after each method call
-    public static Object getObjectByParams(String[] prm, Object[] prmO, Class className) {
-        Session session = HibernateUtil.getSession1();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(className);
-        for (int i = 0; i < prm.length; i++)
-            criteria.add(Restrictions.eq(prm[i], prmO[i]));
-        Object obj = criteria.uniqueResult();
-        openedSession = session;
-        session.getTransaction().commit();
-        return obj;
-    }*/
-
+    // LAZY loading: use closeOpenedSession() after each method call
     public static Object getObjectByParams(String[] prm, Object[] prmO, Class className) {
         Session session = HibernateUtil.getSession1();
         session.beginTransaction();
@@ -90,20 +68,7 @@ public class DAO {
         return obj;
     }
 
-
-    /*// LAZY loading: use closeOpenedSession() after each method call
-    public static List getObjectsByParams(String[] prm, Object[] prmO, Class className) {
-        Session session = HibernateUtil.getSession1();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(className);
-        for (int i = 0; i < prm.length; i++)
-            criteria.add(Restrictions.eq(prm[i], prmO[i]));
-        List obj = criteria.list();
-        openedSession = session;
-        session.getTransaction().commit();
-        return obj;
-    }*/
-
+    // LAZY loading: use closeOpenedSession() after each method call
     public static List getObjectsByParams(String[] prm, Object[] prmO, Class className) {
         Session session = HibernateUtil.getSession1();
         session.beginTransaction();
@@ -121,18 +86,7 @@ public class DAO {
         return obj;
     }
 
-
-    /*// LAZY loading: use closeOpenedSession() after each method call
-    public static List getObjectsByParam(String prm, Object prmO, Class className) {
-        Session session = HibernateUtil.getSession1();
-        session.beginTransaction();
-        List obj = session.createCriteria(className).
-                add(Restrictions.eq(prm, prmO)).list();
-        openedSession = session;
-        session.getTransaction().commit();
-        return obj;
-    }*/
-
+    // LAZY loading: use closeOpenedSession() after each method call
     public static List<Object> getObjectsByParam(String prm, Object prmO, Class className) {
         Session session = HibernateUtil.getSession1();
         session.beginTransaction();
@@ -146,7 +100,6 @@ public class DAO {
         return obj;
     }
 
-
     public static void deleteObjectById(int id, Class className) {
         Session session = HibernateUtil.getSession1();
         session.beginTransaction();
@@ -156,14 +109,7 @@ public class DAO {
         HibernateUtil.closeSession(session);
     }
 
-    /*// LAZY loading: use closeOpenedSession() after each method call
-    public static List getAllObjects(Class className) {
-        Session session = HibernateUtil.getSession1();
-        List lst = session.createCriteria(className).list();
-        openedSession = session;
-        return lst;
-    }*/
-
+    // LAZY loading: use closeOpenedSession() after each method call
     public static List getAllObjects(Class className) {
         Session session = HibernateUtil.getSession1();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -199,7 +145,6 @@ public class DAO {
     public static void closeOpenedSession() {
         if (openedSession != null && openedSession.isOpen()) {
             openedSession.close();
-            //openedSession.disconnect();
         }
     }
 }

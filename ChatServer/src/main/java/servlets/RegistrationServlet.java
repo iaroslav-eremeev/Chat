@@ -39,9 +39,6 @@ public class RegistrationServlet extends HttpServlet {
             User user = new User(login, password, name);
             DAO.addObject(user);
             resp.getWriter().write(new ObjectMapper().writeValueAsString(user));
-        } catch (IllegalArgumentException e) {
-            resp.setStatus(400);
-            resp.getWriter().println("User with this login already exists");
         } catch (Exception e) {
             e.printStackTrace();
             resp.setStatus(400);
