@@ -49,6 +49,7 @@ public class MessageServlet extends HttpServlet {
         User user = (User) DAO.getObjectById(Integer.parseInt(userId), User.class);
         DAO.closeOpenedSession();
         Message message = new Message(user, text);
+        DAO.addObject(message);
         this.service.addMessage(message);
     }
 }

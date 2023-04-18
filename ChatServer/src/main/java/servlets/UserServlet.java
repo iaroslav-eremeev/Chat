@@ -47,7 +47,7 @@ public class UserServlet extends HttpServlet {
             }
         }
         else {
-            System.out.println("Login or password are incorrect");
+            System.out.println("Login or password input is incorrect");
         }
     }
 }
