@@ -9,8 +9,8 @@ $('#btn-sign-up').click(function () {
             url: 'registration',
             method: "POST",
             data: {"login" : $('#login').val(),
-                "name" : $('#name').val(),
-                "password" : $('#password').val()},
+                "password" : $('#password').val(),
+                "name" : $('#name').val(),},
             success: [function (data) {
                 $('.popup-fade').fadeIn();
             }],

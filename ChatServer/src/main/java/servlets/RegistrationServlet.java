@@ -18,19 +18,21 @@ public class RegistrationServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String name = req.getParameter("name");
-        if (login == null) {
+        if (login == null || password == null || name == null) {
             resp.setStatus(400);
-            resp.getWriter().println("Incorrect login");
+            resp.getWriter().println("Incorrect input");
             return;
         }
-        if (password == null) {
+        if (DAO.getObjectByParam("login", login, User.class) != null) {
             resp.setStatus(400);
-            resp.getWriter().println("Incorrect password");
+            resp.getWriter().println("User with this login already exists");
+            DAO.closeOpenedSession();
             return;
         }
-        if (name == null) {
+        if (DAO.getObjectByParam("name", name, User.class) != null) {
             resp.setStatus(400);
-            resp.getWriter().println("Incorrect name");
+            resp.getWriter().println("User with this name already exists");
+            DAO.closeOpenedSession();
             return;
         }
         try {
