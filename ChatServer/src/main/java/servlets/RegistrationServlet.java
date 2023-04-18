@@ -26,15 +26,16 @@ public class RegistrationServlet extends HttpServlet {
         if (DAO.getObjectByParam("login", login, User.class) != null) {
             resp.setStatus(400);
             resp.getWriter().println("User with this login already exists");
-            DAO.closeOpenedSession();
             return;
         }
+        DAO.closeOpenedSession();
         if (DAO.getObjectByParam("name", name, User.class) != null) {
             resp.setStatus(400);
             resp.getWriter().println("User with this name already exists");
-            DAO.closeOpenedSession();
+
             return;
         }
+        DAO.closeOpenedSession();
         try {
             User user = new User(login, password, name);
             DAO.addObject(user);

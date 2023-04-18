@@ -1,5 +1,6 @@
 package hibernate;
 
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -30,74 +31,95 @@ public class DAO {
 
     // LAZY loading: use closeOpenedSession() after each method call
     public static Object getObjectById(int id, Class className) {
-        Session session = HibernateUtil.getSession1();
-        Object obj = session.get(className, id);
-        openedSession = session;
-        return obj;
+        try {
+            Session session = HibernateUtil.getSession1();
+            Object obj = session.get(className, id);
+            openedSession = session;
+            return obj;
+        } catch (NoResultException e){
+            return null;
+        }
     }
 
     // LAZY loading: use closeOpenedSession() after each method call
     public static Object getObjectByParam(String prm, Object prmO, Class className) {
-        Session session = HibernateUtil.getSession1();
-        session.beginTransaction();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(className);
-        Root<Object> root = criteriaQuery.from(className);
-        criteriaQuery.where(criteriaBuilder.equal(root.get(prm), prmO));
-        Object obj = session.createQuery(criteriaQuery).getSingleResult();
-        openedSession = session;
-        session.getTransaction().commit();
-        return obj;
+        try {
+            Session session = HibernateUtil.getSession1();
+            session.beginTransaction();
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(className);
+            Root<Object> root = criteriaQuery.from(className);
+            criteriaQuery.where(criteriaBuilder.equal(root.get(prm), prmO));
+            Object obj = session.createQuery(criteriaQuery).getSingleResult();
+            openedSession = session;
+            session.getTransaction().commit();
+            return obj;
+        } catch (NoResultException e){
+            return null;
+        }
+
     }
 
     // LAZY loading: use closeOpenedSession() after each method call
     public static Object getObjectByParams(String[] prm, Object[] prmO, Class className) {
-        Session session = HibernateUtil.getSession1();
-        session.beginTransaction();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(className);
-        Root<Object> root = criteriaQuery.from(className);
-        Predicate[] predicates = new Predicate[prm.length];
-        for (int i = 0; i < prm.length; i++) {
-            predicates[i] = criteriaBuilder.equal(root.get(prm[i]), prmO[i]);
+        try {
+            Session session = HibernateUtil.getSession1();
+            session.beginTransaction();
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(className);
+            Root<Object> root = criteriaQuery.from(className);
+            Predicate[] predicates = new Predicate[prm.length];
+            for (int i = 0; i < prm.length; i++) {
+                predicates[i] = criteriaBuilder.equal(root.get(prm[i]), prmO[i]);
+            }
+            criteriaQuery.where(predicates);
+            Object obj = session.createQuery(criteriaQuery).getSingleResult();
+            openedSession = session;
+            session.getTransaction().commit();
+            return obj;
+        } catch (NoResultException e) {
+            return null;
         }
-        criteriaQuery.where(predicates);
-        Object obj = session.createQuery(criteriaQuery).getSingleResult();
-        openedSession = session;
-        session.getTransaction().commit();
-        return obj;
     }
 
     // LAZY loading: use closeOpenedSession() after each method call
     public static List getObjectsByParams(String[] prm, Object[] prmO, Class className) {
-        Session session = HibernateUtil.getSession1();
-        session.beginTransaction();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(className);
-        Root<Object> root = criteriaQuery.from(className);
-        List<Predicate> predicates = new ArrayList<>();
-        for (int i = 0; i < prm.length; i++) {
-            predicates.add(criteriaBuilder.equal(root.get(prm[i]), prmO[i]));
+        try {
+            Session session = HibernateUtil.getSession1();
+            session.beginTransaction();
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(className);
+            Root<Object> root = criteriaQuery.from(className);
+            List<Predicate> predicates = new ArrayList<>();
+            for (int i = 0; i < prm.length; i++) {
+                predicates.add(criteriaBuilder.equal(root.get(prm[i]), prmO[i]));
+            }
+            criteriaQuery.where(predicates.toArray(new Predicate[0]));
+            List obj = session.createQuery(criteriaQuery).getResultList();
+            openedSession = session;
+            session.getTransaction().commit();
+            return obj;
+        } catch (NoResultException e) {
+            return null;
         }
-        criteriaQuery.where(predicates.toArray(new Predicate[0]));
-        List obj = session.createQuery(criteriaQuery).getResultList();
-        openedSession = session;
-        session.getTransaction().commit();
-        return obj;
     }
 
     // LAZY loading: use closeOpenedSession() after each method call
     public static List<Object> getObjectsByParam(String prm, Object prmO, Class className) {
-        Session session = HibernateUtil.getSession1();
-        session.beginTransaction();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Object> criteriaQuery = criteriaBuilder.createQuery(className);
-        Root<Object> root = criteriaQuery.from(className);
-        criteriaQuery.where(criteriaBuilder.equal(root.get(prm), prmO));
-        List<Object> obj = session.createQuery(criteriaQuery).getResultList();
-        openedSession = session;
-        session.getTransaction().commit();
-        return obj;
+        try {
+            Session session = HibernateUtil.getSession1();
+            session.beginTransaction();
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Object> criteriaQuery = criteriaBuilder.createQuery(className);
+            Root<Object> root = criteriaQuery.from(className);
+            criteriaQuery.where(criteriaBuilder.equal(root.get(prm), prmO));
+            List<Object> obj = session.createQuery(criteriaQuery).getResultList();
+            openedSession = session;
+            session.getTransaction().commit();
+            return obj;
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public static void deleteObjectById(int id, Class className) {
@@ -111,14 +133,18 @@ public class DAO {
 
     // LAZY loading: use closeOpenedSession() after each method call
     public static List getAllObjects(Class className) {
-        Session session = HibernateUtil.getSession1();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(className);
-        Root<Object> root = criteriaQuery.from(className);
-        criteriaQuery.select(root);
-        List lst = session.createQuery(criteriaQuery).getResultList();
-        openedSession = session;
-        return lst;
+        try {
+            Session session = HibernateUtil.getSession1();
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(className);
+            Root<Object> root = criteriaQuery.from(className);
+            criteriaQuery.select(root);
+            List lst = session.createQuery(criteriaQuery).getResultList();
+            openedSession = session;
+            return lst;
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
 
