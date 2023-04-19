@@ -24,14 +24,14 @@ if (!!window.EventSource) {
         };
     }
     // reconnectFrequencySeconds doubles every retry
-    let reconnectFrequencySeconds = 1;
+    let reconnectFrequencySeconds = 4;
     let evtSource;
 
     let reconnectFunc = debounce(function () {
         setupEventSource();
         // Double every attempt to avoid overwhelming server
         reconnectFrequencySeconds *= 2;
-        // Max out at ~1 minute as a compromise between userId experience and server load
+        // Max out at ~1 minute as a compromise between user experience and server load
         if (reconnectFrequencySeconds >= 64) {
             reconnectFrequencySeconds = 64;
         }
@@ -50,7 +50,7 @@ if (!!window.EventSource) {
         });
         evtSource.onopen = function () {
             // Reset reconnect frequency upon successful connection
-            reconnectFrequencySeconds = 1;
+            reconnectFrequencySeconds = 4;
         };
         evtSource.onerror = function () {
             evtSource.close();
@@ -60,4 +60,34 @@ if (!!window.EventSource) {
     setupEventSource();
 } else {
     alert("Your browser does not support EventSource!");
+}
+
+function sendMessage() {
+    // Get the user ID from the cookie
+    const userId = getCookie("userId");
+    // Get the message text from the input field
+    const message = document.getElementById("message-input").value;
+    $('#send-message-button').click(function () {
+        $.ajax({
+            url: 'sse/chat-watch',
+            method: "POST",
+            data: {"userId": userId, "text": message},
+            /*success: [function (result) {
+                $(location).attr('href', "http://localhost:8080/ChatServer/index.html");
+            }],*/
+            error: [function (xhr, status, error) {
+                alert(xhr.responseText);
+            }]
+        })
+        // Clear the input field
+        document.getElementById("message-input").value = "";
+        }
+    )
+}
+
+// Function to get a cookie by name
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
 }

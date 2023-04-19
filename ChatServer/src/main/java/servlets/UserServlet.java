@@ -35,6 +35,11 @@ public class UserServlet extends HttpServlet {
                     userIdCookie.setMaxAge(30 * 60);
                     userIdCookie.setPath("/");
                     resp.addCookie(userIdCookie);
+                    // Save userName in the third cookie
+                    Cookie userNameCookie = new Cookie("userName", user.getName());
+                    userNameCookie.setMaxAge(30 * 60);
+                    userNameCookie.setPath("/");
+                    resp.addCookie(userNameCookie);
                 }
                 else{
                     resp.setStatus(400);

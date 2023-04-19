@@ -24,14 +24,14 @@ if (!!window.EventSource) {
         };
     }
     // reconnectFrequencySeconds doubles every retry
-    let reconnectFrequencySeconds = 1;
+    let reconnectFrequencySeconds = 10;
     let evtSource;
 
     let reconnectFunc = debounce(function () {
         setupEventSource();
         // Double every attempt to avoid overwhelming server
         reconnectFrequencySeconds *= 2;
-        // Max out at ~1 minute as a compromise between userId experience and server load
+        // Max out at ~1 minute as a compromise between user experience and server load
         if (reconnectFrequencySeconds >= 64) {
             reconnectFrequencySeconds = 64;
         }
@@ -50,7 +50,7 @@ if (!!window.EventSource) {
         });
         evtSource.onopen = function () {
             // Reset reconnect frequency upon successful connection
-            reconnectFrequencySeconds = 1;
+            reconnectFrequencySeconds = 10;
         };
         evtSource.onerror = function () {
             evtSource.close();
@@ -60,4 +60,31 @@ if (!!window.EventSource) {
     setupEventSource();
 } else {
     alert("Your browser does not support EventSource!");
+}
+
+
+$('#send-message-button').click(function () {
+    const userId = getCookie("userId");
+    const userName = getCookie("userName");
+    const message = document.getElementById("message-input").value;
+    $.ajax({
+        url: 'sse/chat-watch',
+        method: "POST",
+        data: {"userId": userId, "text": message},
+        success: [function (result) {
+            $('#chat-messages').append($('<li>').text(userName + ": " + message));
+        }],
+        error: function (xhr, status, error) {
+            alert(xhr.responseText);
+        }
+    })
+    // Clear the input field
+    document.getElementById("message-input").value = "";
+    });
+
+// Function to get a cookie by name
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
 }
