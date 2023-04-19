@@ -16,42 +16,52 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class SSEEmittersRepository {
     private ConcurrentHashMap<Long, CopyOnWriteArrayList<AsyncContext>> onlineUsers = new ConcurrentHashMap<>();
 
-    public void add(AsyncContext asyncContext){
+    public void add(AsyncContext asyncContext) {
         HttpServletRequest request = (HttpServletRequest) asyncContext.getRequest();
         Cookie[] cookies = request.getCookies();
 
-        Long userId = Long.parseLong(cookies[1].getValue());
-        asyncContext.addListener(new AsyncListener() {
-            @Override
-            public void onComplete(AsyncEvent asyncEvent) {
-                onlineUsers.get(userId).remove(asyncContext);
-                System.out.println("User " + userId + " is offline");
-                System.out.println("Complete");
-            }
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("userId")) {
+                    try {
+                        long userId = Long.parseLong(cookie.getValue());
+                        asyncContext.addListener(new AsyncListener() {
+                            @Override
+                            public void onComplete(AsyncEvent asyncEvent) {
+                                onlineUsers.get(userId).remove(asyncContext);
+                                System.out.println("User " + userId + " is offline");
+                                System.out.println("Complete");
+                            }
 
-            @Override
-            public void onTimeout(AsyncEvent asyncEvent) {
-                onlineUsers.get(userId).remove(asyncContext);
-                System.out.println("User " + userId + " is offline");
-                System.out.println("Timeout");
-            }
+                            @Override
+                            public void onTimeout(AsyncEvent asyncEvent) {
+                                onlineUsers.get(userId).remove(asyncContext);
+                                System.out.println("User " + userId + " is offline");
+                                System.out.println("Timeout");
+                            }
 
-            @Override
-            public void onError(AsyncEvent asyncEvent) {
-                onlineUsers.get(userId).remove(asyncContext);
-                System.out.println("User " + userId + " is offline");
-                System.out.println("Error");
-            }
+                            @Override
+                            public void onError(AsyncEvent asyncEvent) {
+                                onlineUsers.get(userId).remove(asyncContext);
+                                System.out.println("User " + userId + " is offline");
+                                System.out.println("Error");
+                            }
 
-            @Override
-            public void onStartAsync(AsyncEvent asyncEvent) {
-                System.out.println("Start async");
+                            @Override
+                            public void onStartAsync(AsyncEvent asyncEvent) {
+                                System.out.println("Start async");
+                            }
+                        });
+                        onlineUsers.getOrDefault(userId, new CopyOnWriteArrayList<>()).add(asyncContext);
+                        System.out.println(this.onlineUsers);
+                        System.out.println("After adding emitter " + this.onlineUsers.get(userId));
+                        System.out.println("User " + userId + " is online");
+                    } catch (NumberFormatException ignored) {
+                    }
+                    break;
+                }
             }
-        });
-        onlineUsers.getOrDefault(userId, new CopyOnWriteArrayList<>()).add(asyncContext);
-        System.out.println(this.onlineUsers);
-        System.out.println("After adding emitter " + this.onlineUsers.get(userId));
-        System.out.println("User " + userId + " is online");
+        }
     }
 
     public CopyOnWriteArrayList<AsyncContext> getEmittersList() {

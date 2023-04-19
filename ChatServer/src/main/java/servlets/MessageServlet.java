@@ -39,8 +39,6 @@ public class MessageServlet extends HttpServlet {
             AsyncContext asyncContext = req.startAsync();
             asyncContext.setTimeout(60000L);
             this.emitters.add(asyncContext);
-
-            asyncContext.dispatch();
         }
     }
 
