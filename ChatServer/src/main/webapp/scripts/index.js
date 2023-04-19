@@ -24,7 +24,7 @@ if (!!window.EventSource) {
         };
     }
     // reconnectFrequencySeconds doubles every retry
-    let reconnectFrequencySeconds = 10;
+    let reconnectFrequencySeconds = 2;
     let evtSource;
 
     let reconnectFunc = debounce(function () {
@@ -50,7 +50,7 @@ if (!!window.EventSource) {
         });
         evtSource.onopen = function () {
             // Reset reconnect frequency upon successful connection
-            reconnectFrequencySeconds = 10;
+            reconnectFrequencySeconds = 2;
         };
         evtSource.onerror = function () {
             evtSource.close();
@@ -65,15 +65,11 @@ if (!!window.EventSource) {
 
 $('#send-message-button').click(function () {
     const userId = getCookie("userId");
-    const userName = getCookie("userName");
     const message = document.getElementById("message-input").value;
     $.ajax({
         url: 'sse/chat-watch',
         method: "POST",
         data: {"userId": userId, "text": message},
-        success: [function (result) {
-            $('#chat-messages').append($('<li>').text(userName + ": " + message));
-        }],
         error: function (xhr, status, error) {
             alert(xhr.responseText);
         }

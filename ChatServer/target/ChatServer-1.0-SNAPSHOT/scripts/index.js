@@ -24,7 +24,7 @@ if (!!window.EventSource) {
         };
     }
     // reconnectFrequencySeconds doubles every retry
-    let reconnectFrequencySeconds = 4;
+    let reconnectFrequencySeconds = 2;
     let evtSource;
 
     let reconnectFunc = debounce(function () {
@@ -50,7 +50,7 @@ if (!!window.EventSource) {
         });
         evtSource.onopen = function () {
             // Reset reconnect frequency upon successful connection
-            reconnectFrequencySeconds = 4;
+            reconnectFrequencySeconds = 2;
         };
         evtSource.onerror = function () {
             evtSource.close();
@@ -62,28 +62,21 @@ if (!!window.EventSource) {
     alert("Your browser does not support EventSource!");
 }
 
-function sendMessage() {
-    // Get the user ID from the cookie
+
+$('#send-message-button').click(function () {
     const userId = getCookie("userId");
-    // Get the message text from the input field
     const message = document.getElementById("message-input").value;
-    $('#send-message-button').click(function () {
-        $.ajax({
-            url: 'sse/chat-watch',
-            method: "POST",
-            data: {"userId": userId, "text": message},
-            /*success: [function (result) {
-                $(location).attr('href', "http://localhost:8080/ChatServer/index.html");
-            }],*/
-            error: [function (xhr, status, error) {
-                alert(xhr.responseText);
-            }]
-        })
-        // Clear the input field
-        document.getElementById("message-input").value = "";
+    $.ajax({
+        url: 'sse/chat-watch',
+        method: "POST",
+        data: {"userId": userId, "text": message},
+        error: function (xhr, status, error) {
+            alert(xhr.responseText);
         }
-    )
-}
+    })
+    // Clear the input field
+    document.getElementById("message-input").value = "";
+    });
 
 // Function to get a cookie by name
 function getCookie(name) {

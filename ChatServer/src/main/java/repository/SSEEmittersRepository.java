@@ -48,13 +48,7 @@ public class SSEEmittersRepository {
                 System.out.println("Start async");
             }
         });
-        //TODO getOrDefault
-        if (onlineUsers.containsKey(userId)) {
-            onlineUsers.get(userId).add(asyncContext);
-        } else {
-            onlineUsers.put(userId, new CopyOnWriteArrayList<>());
-            onlineUsers.get(userId).add(asyncContext);
-        }
+        onlineUsers.getOrDefault(userId, new CopyOnWriteArrayList<>()).add(asyncContext);
         System.out.println(this.onlineUsers);
         System.out.println("After adding emitter " + this.onlineUsers.get(userId));
         System.out.println("User " + userId + " is online");
