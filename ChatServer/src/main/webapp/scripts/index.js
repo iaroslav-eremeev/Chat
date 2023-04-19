@@ -1,86 +1,86 @@
-if (!!window.EventSource) {
-    function isFunction(functionToCheck) {
-        return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
-    }
-    function debounce(func, wait) {
-        let timeout;
-        let waitFunc;
+$(document).ready(function() {
+    if (!!window.EventSource) {
+        function isFunction(functionToCheck) {
+            return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+        }
 
-        return function () {
-            if (isFunction(wait)) {
-                waitFunc = wait;
-            } else {
-                waitFunc = function () {
-                    return wait
+        function debounce(func, wait) {
+            var timeout;
+            var waitFunc;
+
+            return function () {
+                if (isFunction(wait)) {
+                    waitFunc = wait;
+                } else {
+                    waitFunc = function () {
+                        return wait
+                    };
+                }
+                var context = this, args = arguments;
+                var later = function () {
+                    timeout = null;
+                    func.apply(context, args);
                 };
-            }
-            let context = this, args = arguments;
-            const later = function () {
-                timeout = null;
-                func.apply(context, args);
+                clearTimeout(timeout);
+                timeout = setTimeout(later, waitFunc());
             };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, waitFunc());
-        };
-    }
-    // reconnectFrequencySeconds doubles every retry
-    let reconnectFrequencySeconds = 2;
-    let evtSource;
-
-    let reconnectFunc = debounce(function () {
-        setupEventSource();
-        // Double every attempt to avoid overwhelming server
-        reconnectFrequencySeconds *= 2;
-        // Max out at ~1 minute as a compromise between user experience and server load
-        if (reconnectFrequencySeconds >= 64) {
-            reconnectFrequencySeconds = 64;
         }
-    }, function () {
-        return reconnectFrequencySeconds * 1000
-    });
+        // reconnectFrequencySeconds doubles every retry
+        var reconnectFrequencySeconds = 1;
+        var evtSource;
 
-    function setupEventSource() {
-        let evtSource = new EventSource('sse/chat-watch');
-        evtSource.addEventListener('sse/chat-watch', function(event) {
-            const msg = JSON.parse(event.data);
-            const chatMessages = document.querySelector('#chat-messages');
-            const messageDiv = document.createElement('div');
-            messageDiv.innerText = `${msg.username}: ${msg.message}`;
-            chatMessages.appendChild(messageDiv);
+        var reconnectFunc = debounce(function () {
+            setupEventSource();
+            // Double every attempt to avoid overwhelming server
+            reconnectFrequencySeconds *= 2;
+            // Max out at ~1 minute as a compromise between userId experience and server load
+            if (reconnectFrequencySeconds >= 64) {
+                reconnectFrequencySeconds = 64;
+            }
+        }, function () {
+            return reconnectFrequencySeconds * 1000
         });
-        evtSource.onopen = function () {
-            // Reset reconnect frequency upon successful connection
-            reconnectFrequencySeconds = 2;
-        };
-        evtSource.onerror = function () {
-            evtSource.close();
-            reconnectFunc();
-        };
-    }
-    setupEventSource();
-} else {
-    alert("Your browser does not support EventSource!");
-}
 
-
-$('#send-message-button').click(function () {
-    const userId = getCookie("userId");
-    const message = document.getElementById("message-input").value;
-    $.ajax({
-        url: 'sse/chat-watch',
-        method: "POST",
-        data: {"userId": userId, "text": message},
-        error: function (xhr, status, error) {
-            alert(xhr.responseText);
+        function setupEventSource() {
+            evtSource = new EventSource('sse/chat-watch');
+            evtSource.onmessage = function (e) {
+                var msg = JSON.parse(e.data);
+                alert(msg.text);
+                $("#chat-messages").append("<p id='" + msg.user.userId + "'>" + " "
+                    + "<span id='" + msg.user.name + "'>" + msg.user.name + "</span>" + ": " + msg.text + "</p>")
+                    /*.scrollTop($('#chat-messages')[0].scrollHeight);*/
+            };
+            evtSource.onopen = function () {
+                // Reset reconnect frequency upon successful connection
+                reconnectFrequencySeconds = 1;
+            };
+            evtSource.onerror = function () {
+                evtSource.close();
+                reconnectFunc();
+            };
         }
-    })
-    // Clear the input field
-    document.getElementById("message-input").value = "";
+        setupEventSource();
+    } else {
+        alert("Your browser does not support EventSource!");
+    }
+
+    $('#send-message-button').click(function () {
+        $.ajax({
+            url: 'sse/chat-watch',
+            method: "POST",
+            data: {"userId": getCookie("userId"), "text": $('#message-input').val()},
+            error: function (data) {
+                alert('+');
+            }
+        })
+        // Clear the input field
+        /*$('#message-input').val("");*/
     });
 
-// Function to get a cookie by name
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(";").shift();
-}
+    // Function to get a cookie by name
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(";").shift();
+    }
+});
