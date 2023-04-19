@@ -49,7 +49,23 @@ public class AuthorizationFilter implements Filter {
         // If the request came from the login page or the session is not empty, we give the go-ahead to proceed further
         if (request.getRequestURI().endsWith("js") || loginRequest || registerRequest
                 || value != null && DAO.getObjectByParam("hash", value, User.class) != null) {
-            filterChain.doFilter(request, response);
+            // Check if the request is asynchronous
+            if (request.isAsyncStarted()) {
+                // Continue processing the request asynchronously
+                AsyncContext asyncContext = request.getAsyncContext();
+                asyncContext.start(() -> {
+                    try {
+                        filterChain.doFilter(request, response);
+                        asyncContext.complete();
+                    } catch (IOException | ServletException e) {
+                        asyncContext.complete();
+                        throw new RuntimeException(e);
+                    }
+                });
+            } else {
+                // Continue processing the request synchronously
+                filterChain.doFilter(request, response);
+            }
         // If not redirect to login page
         } else {
             response.sendRedirect(loginURI + ".html");

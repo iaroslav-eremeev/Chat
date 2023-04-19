@@ -48,6 +48,7 @@ public class MessageServlet extends HttpServlet {
         String text = req.getParameter("text");
         User user = (User) DAO.getObjectById(Integer.parseInt(userId), User.class);
         DAO.closeOpenedSession();
+        assert user != null;
         Message message = new Message(user, text);
         DAO.addObject(message);
         this.service.addMessage(message);
