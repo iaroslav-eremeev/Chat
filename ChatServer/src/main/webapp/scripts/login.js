@@ -1,5 +1,5 @@
 $('#btn-go-to-sign-up').click(function () {
-        $(location).attr('href', "../registration.html");
+        $(location).attr('href', "http://localhost:8080/ChatServer/login.html");
     }
 )
 
@@ -9,7 +9,7 @@ $('#btn-login').click(function () {
             method: "POST",
             data: {"login": $('#login').val(), "password": $('#password').val()},
             success: [function (result) {
-                $(location).attr('href', "../index.html");
+                $(location).attr('href', "http://localhost:8080/ChatServer/index.html");
             }],
             error: [function (xhr, status, error) {
                 alert(xhr.responseText);

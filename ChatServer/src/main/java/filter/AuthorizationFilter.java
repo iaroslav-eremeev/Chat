@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/*@WebFilter("/*")
+@WebFilter(value = "/*", asyncSupported = true)
 public class AuthorizationFilter implements Filter {
 
     @Override
@@ -60,4 +60,4 @@ public class AuthorizationFilter implements Filter {
     public void destroy() {
 
     }
-}*/
+}

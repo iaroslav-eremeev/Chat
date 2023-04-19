@@ -1,5 +1,5 @@
 $('#btn-go-to-sign-up').click(function () {
-        $(location).attr('href', "http://localhost:8080/ChatServer/registration.html");
+        $(location).attr('href', "http://localhost:8080/ChatServer/login.html");
     }
 )
 
