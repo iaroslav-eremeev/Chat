@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to the quiz!</title>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #9baefd;
+            color: #494949;
+        }
+
+        /* Set the colors of the buttons */
+        .container .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .container .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+
+        .container .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+        }
+
+        .container .btn-warning:hover {
+            background-color: #e0a800;
+            border-color: #d39e00;
+        }
+
+        /* Center align the login and password fields */
+        .container .form-group {
+            text-align: center;
+        }
+
+        /* Center align the login and sign-up buttons */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Vertically center the form */
+        .container form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form>
+        <div class="form-group text-center">
+            <h1>This is a simple web chat</h1>
+            <h3>Chat with your mentor or any friends who have enough patience!</h3>
+        </div>
+        <div class="form-group">
+            <label for="login">Login</label>
+            <input type="text" class="form-control" id="login" placeholder="Enter login">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password">
+        </div>
+        <div class="form-group text-center">
+            <button type="button" class="btn btn-primary btn-lg" id="btn-login">Log In</button>
+            <button type="button" class="btn btn-warning btn-lg" id="btn-go-to-sign-up">Go to Sign Up</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="../scripts/login.js"></script>
+</body>
+</html>

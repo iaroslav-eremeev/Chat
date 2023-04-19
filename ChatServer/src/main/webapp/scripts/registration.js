@@ -1,5 +1,5 @@
 $('#btn-go-login').click(function () {
-        $(location).attr('href', "http://localhost:8080/ChatServer/login.html");
+        $(location).attr('href', "../login.html");
     }
 )
 
@@ -23,5 +23,5 @@ $('#btn-sign-up').click(function () {
 
 $('#btn-ok').click(function () {
     $('.popup-fade').fadeOut();
-    $(location).attr('href', "http://localhost:8080/ChatServer/login.html");
+    $(location).attr('href', "../login.html");
 })
