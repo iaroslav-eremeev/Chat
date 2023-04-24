@@ -45,7 +45,6 @@ $(document).ready(function() {
             evtSource = new EventSource('sse/chat-watch');
             evtSource.onmessage = function (e) {
                 var msg = JSON.parse(e.data);
-                alert(msg.text);
                 $("#chat-messages").append("<p id='" + msg.user.userId + "'>" + " "
                     + "<span id='" + msg.user.name + "'>" + msg.user.name + "</span>" + ": " + msg.text + "</p>")
                     /*.scrollTop($('#chat-messages')[0].scrollHeight);*/
@@ -74,7 +73,7 @@ $(document).ready(function() {
             }
         })
         // Clear the input field
-        /*$('#message-input').val("");*/
+        $('#message-input').val("");
     });
 
     // Function to get a cookie by name

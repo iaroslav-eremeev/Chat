@@ -68,9 +68,6 @@ $(document).ready(function() {
             url: 'sse/chat-watch',
             method: "POST",
             data: {"userId": getCookie("userId"), "text": $('#message-input').val()},
-            error: function (data) {
-                alert('+');
-            }
         })
         // Clear the input field
         $('#message-input').val("");
