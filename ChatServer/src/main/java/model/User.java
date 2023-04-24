@@ -3,6 +3,7 @@ package model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.lang3.builder.ToStringExclude;
 
 import java.util.Objects;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
+    @ToStringExclude
     private List<Message> messages = new ArrayList<>();
 
     @Override
@@ -49,15 +51,5 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(userId, login, password, name, hash, messages);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", login='" + login + '\'' +
-                ", name='" + name + '\'' +
-                ", messages=" + messages.size() +
-                '}';
     }
 }

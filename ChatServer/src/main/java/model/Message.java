@@ -38,13 +38,4 @@ public class Message {
     public int hashCode() {
         return Objects.hash(messageId, user, text);
     }
-
-    @Override
-    public String toString() {
-        return "Message{" +
-                "messageId=" + messageId +
-                ", user=" + user.getName() +
-                ", text='" + text + '\'' +
-                '}';
-    }
 }
