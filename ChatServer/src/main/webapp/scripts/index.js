@@ -79,4 +79,20 @@ $(document).ready(function() {
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) return parts.pop().split(";").shift();
     }
+
+    // Retrieve all messages from the database
+    $.ajax({
+        url: 'messages',
+        method: "GET",
+        data: {"userId": "0"},
+        success: function(data) {
+            $.each(JSON.parse(data), function (key, value) {
+                $("#chat-messages").append("<p id='" + value.user.userId + "'>" + " "
+                    + "<span id='" + value.user.name + "'>" + value.user.name + "</span>" + ": " + value.text + "</p>")
+            });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+        }
+    });
 });
