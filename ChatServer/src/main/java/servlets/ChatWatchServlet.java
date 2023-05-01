@@ -36,6 +36,7 @@ public class ChatWatchServlet extends HttpServlet {
             resp.setCharacterEncoding("UTF-8");
 
             AsyncContext asyncContext = req.startAsync();
+            resp.getWriter().write("Connection is ok");
             asyncContext.setTimeout(60000L);
             this.emitters.add(asyncContext);
         }
