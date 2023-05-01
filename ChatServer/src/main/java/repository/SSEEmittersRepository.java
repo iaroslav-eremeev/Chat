@@ -26,21 +26,27 @@ public class SSEEmittersRepository {
                         asyncContext.addListener(new AsyncListener() {
                             @Override
                             public void onComplete(AsyncEvent asyncEvent) {
-                                onlineUsers.get(userId).remove(asyncContext);
+                                if (onlineUsers.get(userId) != null){
+                                    onlineUsers.get(userId).remove(asyncContext);
+                                }
                                 System.out.println("User " + userId + " is offline");
                                 System.out.println("Complete");
                             }
 
                             @Override
                             public void onTimeout(AsyncEvent asyncEvent) {
-                                onlineUsers.get(userId).remove(asyncContext);
+                                if (onlineUsers.get(userId) != null){
+                                    onlineUsers.get(userId).remove(asyncContext);
+                                }
                                 System.out.println("User " + userId + " is offline");
                                 System.out.println("Timeout");
                             }
 
                             @Override
                             public void onError(AsyncEvent asyncEvent) {
-                                onlineUsers.get(userId).remove(asyncContext);
+                                if (onlineUsers.get(userId) != null){
+                                    onlineUsers.get(userId).remove(asyncContext);
+                                }
                                 System.out.println("User " + userId + " is offline");
                                 System.out.println("Error");
                             }

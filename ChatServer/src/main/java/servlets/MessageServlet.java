@@ -1,6 +1,5 @@
 package servlets;
 
-
 import hibernate.DAO;
 import model.Message;
 import model.User;
@@ -35,7 +34,7 @@ public class MessageServlet extends HttpServlet {
             }
             // return all messages from the database
             else {
-                List messages = DAO.getAllObjects(Message.class);
+                List<Message> messages = DAO.getAllObjects(Message.class);
                 DAO.closeOpenedSession();
                 JSONArray jsonArray = new JSONArray(messages);
                 resp.setContentType("application/json");

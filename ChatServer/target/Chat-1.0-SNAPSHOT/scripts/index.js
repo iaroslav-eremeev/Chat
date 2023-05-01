@@ -82,7 +82,7 @@ $(document).ready(function() {
 
     // Retrieve all messages from the database
     $.ajax({
-        url: 'sse/chat-watch',
+        url: 'messages',
         method: "GET",
         data: {"userId": "0"},
         success: function(data) {
