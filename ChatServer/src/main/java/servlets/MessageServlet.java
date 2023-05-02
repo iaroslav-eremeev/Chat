@@ -1,9 +1,10 @@
 package servlets;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import hibernate.DAO;
 import model.Message;
 import model.User;
-import org.json.JSONArray;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -34,12 +35,14 @@ public class MessageServlet extends HttpServlet {
             }
             // return all messages from the database
             else {
-                List<Message> messages = DAO.getAllObjects(Message.class);
+                List messages = DAO.getAllObjects(Message.class);
+                ObjectMapper objectMapper = new ObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+                String json = objectMapper.writeValueAsString(messages);
+                System.out.println(json);
                 DAO.closeOpenedSession();
-                JSONArray jsonArray = new JSONArray(messages);
                 resp.setContentType("application/json");
                 try {
-                    resp.getWriter().write(jsonArray.toString());
+                    resp.getWriter().write(json);
                 } catch (Exception e) {
                     resp.setStatus(400);
                     resp.getWriter().println(e.getMessage());

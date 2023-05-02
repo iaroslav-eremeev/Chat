@@ -37,7 +37,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    @ToStringExclude
+    @ToString.Exclude
     private List<Message> messages = new ArrayList<>();
 
     @Override

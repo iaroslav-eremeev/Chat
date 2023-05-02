@@ -85,11 +85,10 @@ $(document).ready(function() {
         url: 'messages',
         method: "GET",
         data: {"userId": "0"},
-        success: function(data) {
-            alert(data);
-            $.each(JSON.parse(data), function (key, value) {
+        success: function(messages) {
+            $.each(messages, function (key, value) {
                 $("#chat-messages").append("<p id='" + value.user.userId + "'>" + " "
-                    + "<span id='" + value.user.name + "'>" + value.user.name + "</span>" + ": " + value.text + "</p>")
+                    + "<span id='" + value.user.userId + "'>" + value.user.name + "</span>" + ": " + value.text + "</p>");
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
