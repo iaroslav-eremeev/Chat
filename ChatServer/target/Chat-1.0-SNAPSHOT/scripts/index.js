@@ -41,6 +41,16 @@ $(document).ready(function() {
             return reconnectFrequencySeconds * 1000
         });
 
+        $('#send-message-button').click(function () {
+            $.ajax({
+                url: 'sse/chat-watch',
+                method: "POST",
+                data: {"userId": getCookie("userId"), "text": $('#message-input').val()},
+            })
+            // Clear the input field
+            $('#message-input').val("");
+        });
+
         function setupEventSource() {
             evtSource = new EventSource('sse/chat-watch');
             evtSource.onmessage = function (e) {
@@ -63,15 +73,7 @@ $(document).ready(function() {
         alert("Your browser does not support EventSource!");
     }
 
-    $('#send-message-button').click(function () {
-        $.ajax({
-            url: 'sse/chat-watch',
-            method: "POST",
-            data: {"userId": getCookie("userId"), "text": $('#message-input').val()},
-        })
-        // Clear the input field
-        $('#message-input').val("");
-    });
+
 
     // Function to get a cookie by name
     function getCookie(name) {
