@@ -75,7 +75,7 @@ public class SSEEmittersRepository {
     public ArrayList<User> getOnlineUsers() {
         ArrayList<User> onlineUsers = new ArrayList<>();
         for (Long userId : this.onlineUsers.keySet()) {
-            if (this.onlineUsers.containsKey(userId)) {
+            if (this.onlineUsers.containsKey(userId) && !this.onlineUsers.get(userId).isEmpty()) {
                 User user = (User) DAO.getObjectById(userId, User.class);
                 if (user != null) {
                     onlineUsers.add(user);
