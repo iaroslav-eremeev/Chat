@@ -96,7 +96,8 @@ $(document).ready(function() {
         success: function(messages) {
             $.each(messages, function (key, value) {
                 $("#chat-messages").append("<p id='" + value.user.userId + "'>" + " "
-                    + "<span id='" + value.user.userId + "'>" + value.user.name + "</span>" + ": " + value.text + "</p>");
+                    + "<span id='" + value.user.userId + "'>" + value.user.name + "</span>" + ": " + value.text + "</p>")
+                    .scrollTop($('#chat-messages')[0].scrollHeight);
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
