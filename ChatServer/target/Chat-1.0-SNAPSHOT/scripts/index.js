@@ -41,6 +41,8 @@ $(document).ready(function() {
             return reconnectFrequencySeconds * 1000
         });
 
+        checkOnlineUsers();
+
         function setupEventSource() {
             evtSource = new EventSource('sse/chat-watch');
             evtSource.onmessage = function (e) {
@@ -61,7 +63,7 @@ $(document).ready(function() {
             // Check if the user is online
             setInterval(function () {
                 checkOnlineUsers();
-            }, 30000);
+            }, 15000);
         }
 
         $('#send-message-button').click(function () {
@@ -87,6 +89,7 @@ $(document).ready(function() {
         });
 
         function checkOnlineUsers() {
+            $('#online-users').html("<p><strong>Online:</strong></p>");
             $.ajax({
                 url: 'sse/chat-watch',
                 method: 'GET',
