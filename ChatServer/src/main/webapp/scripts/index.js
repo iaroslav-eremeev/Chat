@@ -47,7 +47,7 @@ $(document).ready(function() {
                 var msg = JSON.parse(e.data);
                 $("#chat-messages").append("<p id='" + msg.user.userId + "'>" + " "
                     + "<span id='" + msg.user.name + "'>" + msg.user.name + "</span>" + ": " + msg.text + "</p>")
-                /*.scrollTop($('#chat-messages')[0].scrollHeight);*/
+                .scrollTop($('#chat-messages')[0].scrollHeight);
             };
             evtSource.onopen = function () {
                 // Reset reconnect frequency upon successful connection
