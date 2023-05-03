@@ -23,10 +23,11 @@ public class AuthorizationFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        if(request.getRequestURI().endsWith("index.html")) {
+        // This chunk of code helps to access index.html without logging in if needed
+        /*if(request.getRequestURI().endsWith("index.html")) {
             filterChain.doFilter(request, response);
             return;
-        }
+        }*/
 
         Cookie[] cookies = request.getCookies();
         String value = null;
@@ -38,19 +39,17 @@ public class AuthorizationFilter implements Filter {
             }
         }
 
-        System.out.println(request.getRequestURI());
-
         // Request/Redirect URL to Login Servlet
         String loginURI = request.getContextPath() + "/login";
         String registerURI = request.getContextPath() + "/registration";
         // If the session was previously created
         boolean loginRequest = request.getRequestURI().contains(loginURI);
         boolean registerRequest = request.getRequestURI().contains(registerURI);
-        // If the request came from the login page or the session is not empty, we give the go-ahead to proceed further
+        // If the request came from the login page or the session is not empty, we proceed further
         if (request.getRequestURI().endsWith("js") || loginRequest || registerRequest
-                || value != null && DAO.getObjectByParam("hash", value, User.class) != null) {
+                || (value != null && DAO.getObjectByParam("hash", value, User.class) != null)) {
             filterChain.doFilter(request, response);
-        // If not redirect to login page
+            // If not redirect to login page
         } else {
             response.sendRedirect(loginURI + ".html");
         }
