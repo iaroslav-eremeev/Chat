@@ -74,6 +74,13 @@ $(document).ready(function() {
             })
         });
 
+        $('#message-input').keypress(function (e) {
+            if (e.which === 13) {
+                $('#send-message-button').click();
+                return false;
+            }
+        });
+
         // Setup Event Source in the very end, when everything is initialized
         setupEventSource();
 
