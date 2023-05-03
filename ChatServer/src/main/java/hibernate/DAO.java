@@ -30,7 +30,7 @@ public class DAO {
     }
 
     // LAZY loading: use closeOpenedSession() after each method call
-    public static Object getObjectById(int id, Class className) {
+    public static Object getObjectById(long id, Class className) {
         try {
             Session session = HibernateUtil.getSession1();
             Object obj = session.get(className, id);

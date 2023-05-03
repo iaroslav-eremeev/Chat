@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 @WebServlet(value = "/sse/chat-watch", asyncSupported = true)
 public class ChatWatchServlet extends HttpServlet {
@@ -52,19 +53,15 @@ public class ChatWatchServlet extends HttpServlet {
             writer.flush();
         }
 
-        if (req.getParameter("userId") != null){
-            int userId = Integer.parseInt(req.getParameter("userId"));
-            if (this.emitters.isUserOnline(userId)) {
-                User onlineUser = (User) DAO.getObjectById(userId, User.class);
-                ObjectMapper objectMapper = new ObjectMapper();
-                try {
-                    resp.getWriter().write(objectMapper.writeValueAsString(onlineUser));
-                } catch (Exception e) {
-                    resp.setStatus(400);
-                    resp.getWriter().println(e.getMessage());
-                }
-                DAO.closeOpenedSession();
-            };
+        if (req.getParameter("checkOnlineUsers") != null){
+            ArrayList<User> onlineUsers = this.emitters.getOnlineUsers();
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                resp.getWriter().write(objectMapper.writeValueAsString(onlineUsers));
+            } catch (Exception e) {
+                resp.setStatus(400);
+                resp.getWriter().println(e.getMessage());
+            }
         }
     }
 
@@ -72,7 +69,7 @@ public class ChatWatchServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         String userId = req.getParameter("userId");
         String text = req.getParameter("text");
-        User user = (User) DAO.getObjectById(Integer.parseInt(userId), User.class);
+        User user = (User) DAO.getObjectById(Long.parseLong(userId), User.class);
         assert user != null;
         Message message = new Message(user, text);
         this.service.addMessage(message);

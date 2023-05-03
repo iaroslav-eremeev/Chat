@@ -19,7 +19,7 @@ public class MessageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         // if GET request has a parameter "userId"
         if (req.getParameter("userId") != null) {
-            int userId = Integer.parseInt(req.getParameter("userId"));
+            long userId = Long.parseLong(req.getParameter("userId"));
             // return all messages of the user with certain id
             if (userId > 0) {
                 User user = (User) DAO.getObjectById(userId, User.class);

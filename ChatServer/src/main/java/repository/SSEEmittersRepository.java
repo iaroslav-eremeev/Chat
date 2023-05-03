@@ -8,8 +8,10 @@ import javax.servlet.AsyncEvent;
 import javax.servlet.AsyncListener;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.List;
 
 public class SSEEmittersRepository {
     private ConcurrentHashMap<Long, CopyOnWriteArrayList<AsyncContext>> onlineUsers = new ConcurrentHashMap<>();
@@ -70,8 +72,17 @@ public class SSEEmittersRepository {
         }
     }
 
-    public boolean isUserOnline(long userId) {
-        return onlineUsers.containsKey(userId);
+    public ArrayList<User> getOnlineUsers() {
+        ArrayList<User> onlineUsers = new ArrayList<>();
+        for (Long userId : this.onlineUsers.keySet()) {
+            if (this.onlineUsers.containsKey(userId)) {
+                User user = (User) DAO.getObjectById(userId, User.class);
+                if (user != null) {
+                    onlineUsers.add(user);
+                }
+            }
+        }
+        return onlineUsers;
     }
 
     public CopyOnWriteArrayList<AsyncContext> getEmittersList() {
