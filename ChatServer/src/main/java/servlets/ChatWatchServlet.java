@@ -46,11 +46,11 @@ public class ChatWatchServlet extends HttpServlet {
             this.emitters.add(asyncContext);
 
             // Send first SSE event
-            PrintWriter writer = resp.getWriter();
+            /*PrintWriter writer = resp.getWriter();
             writer.write("event: Start\n");
             writer.write("data: Launching chat watcher\n");
             writer.write("\n\n");
-            writer.flush();
+            writer.flush();*/
         }
 
         if (req.getParameter("checkOnlineUsers") != null){

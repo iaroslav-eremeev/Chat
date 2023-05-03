@@ -45,7 +45,9 @@ $(document).ready(function() {
 
         function setupEventSource() {
             evtSource = new EventSource('sse/chat-watch');
+            alert("Event source activated!");
             evtSource.onmessage = function (e) {
+                alert("Event source message sent!");
                 var msg = JSON.parse(e.data);
                 $("#chat-messages").append("<p id='" + msg.user.userId + "'>" + " "
                     + "<span id='" + msg.user.name + "'>" + msg.user.name + "</span>" + ": " + msg.text + "</p>")
