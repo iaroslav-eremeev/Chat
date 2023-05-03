@@ -41,23 +41,13 @@ $(document).ready(function() {
             return reconnectFrequencySeconds * 1000
         });
 
-        $('#send-message-button').click(function () {
-            $.ajax({
-                url: 'sse/chat-watch',
-                method: "POST",
-                data: {"userId": getCookie("userId"), "text": $('#message-input').val()},
-            })
-            // Clear the input field
-            $('#message-input').val("");
-        });
-
         function setupEventSource() {
             evtSource = new EventSource('sse/chat-watch');
             evtSource.onmessage = function (e) {
                 var msg = JSON.parse(e.data);
                 $("#chat-messages").append("<p id='" + msg.user.userId + "'>" + " "
                     + "<span id='" + msg.user.name + "'>" + msg.user.name + "</span>" + ": " + msg.text + "</p>")
-                    /*.scrollTop($('#chat-messages')[0].scrollHeight);*/
+                /*.scrollTop($('#chat-messages')[0].scrollHeight);*/
             };
             evtSource.onopen = function () {
                 // Reset reconnect frequency upon successful connection
@@ -68,12 +58,28 @@ $(document).ready(function() {
                 reconnectFunc();
             };
         }
+
+        $('#send-message-button').click(function () {
+            $.ajax({
+                url: 'sse/chat-watch',
+                method: "POST",
+                data: {"userId": getCookie("userId"), "text": $('#message-input').val()},
+                success: function() {
+                    // Clear the input field
+                    $('#message-input').val("");
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            })
+        });
+
+        // Setup Event Source in the very end, when everything is initialized
         setupEventSource();
+
     } else {
         alert("Your browser does not support EventSource!");
     }
-
-
 
     // Function to get a cookie by name
     function getCookie(name) {
@@ -97,4 +103,5 @@ $(document).ready(function() {
             console.log(textStatus, errorThrown);
         }
     });
+
 });

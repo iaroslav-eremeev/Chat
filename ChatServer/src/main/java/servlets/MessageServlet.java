@@ -38,7 +38,6 @@ public class MessageServlet extends HttpServlet {
                 List messages = DAO.getAllObjects(Message.class);
                 ObjectMapper objectMapper = new ObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
                 String json = objectMapper.writeValueAsString(messages);
-                System.out.println(json);
                 DAO.closeOpenedSession();
                 resp.setContentType("application/json");
                 try {

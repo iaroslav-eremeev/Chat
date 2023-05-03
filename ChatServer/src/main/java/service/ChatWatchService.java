@@ -20,8 +20,7 @@ public class ChatWatchService {
 
     private void sendMessage(PrintWriter writer, Message message) {
         try {
-            writer.println("data: " + new ObjectMapper().writeValueAsString(message));
-            writer.println();
+            writer.println("data: " + new ObjectMapper().writeValueAsString(message) + "\n\n");
             writer.flush();
         } catch (Exception ignored) {
         }

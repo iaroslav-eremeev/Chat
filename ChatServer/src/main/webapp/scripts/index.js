@@ -41,6 +41,24 @@ $(document).ready(function() {
             return reconnectFrequencySeconds * 1000
         });
 
+        function setupEventSource() {
+            evtSource = new EventSource('sse/chat-watch');
+            evtSource.onmessage = function (e) {
+                var msg = JSON.parse(e.data);
+                $("#chat-messages").append("<p id='" + msg.user.userId + "'>" + " "
+                    + "<span id='" + msg.user.name + "'>" + msg.user.name + "</span>" + ": " + msg.text + "</p>")
+                /*.scrollTop($('#chat-messages')[0].scrollHeight);*/
+            };
+            evtSource.onopen = function () {
+                // Reset reconnect frequency upon successful connection
+                reconnectFrequencySeconds = 1;
+            };
+            evtSource.onerror = function () {
+                evtSource.close();
+                reconnectFunc();
+            };
+        }
+
         $('#send-message-button').click(function () {
             $.ajax({
                 url: 'sse/chat-watch',
@@ -56,29 +74,12 @@ $(document).ready(function() {
             })
         });
 
-        function setupEventSource() {
-            evtSource = new EventSource('sse/chat-watch');
-            evtSource.onmessage = function (e) {
-                var msg = JSON.parse(e.data);
-                $("#chat-messages").append("<p id='" + msg.user.userId + "'>" + " "
-                    + "<span id='" + msg.user.name + "'>" + msg.user.name + "</span>" + ": " + msg.text + "</p>")
-                    /*.scrollTop($('#chat-messages')[0].scrollHeight);*/
-            };
-            evtSource.onopen = function () {
-                // Reset reconnect frequency upon successful connection
-                reconnectFrequencySeconds = 1;
-            };
-            evtSource.onerror = function () {
-                evtSource.close();
-                reconnectFunc();
-            };
-        }
+        // Setup Event Source in the very end, when everything is initialized
         setupEventSource();
+
     } else {
         alert("Your browser does not support EventSource!");
     }
-
-
 
     // Function to get a cookie by name
     function getCookie(name) {
@@ -102,4 +103,5 @@ $(document).ready(function() {
             console.log(textStatus, errorThrown);
         }
     });
+
 });
