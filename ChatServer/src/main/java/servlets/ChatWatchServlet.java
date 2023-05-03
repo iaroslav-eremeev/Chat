@@ -1,6 +1,8 @@
 package servlets;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import hibernate.DAO;
 import model.Message;
 import model.User;
@@ -48,6 +50,21 @@ public class ChatWatchServlet extends HttpServlet {
             writer.write("data: Launching chat watcher\n");
             writer.write("\n\n");
             writer.flush();
+        }
+
+        if (req.getParameter("userId") != null){
+            int userId = Integer.parseInt(req.getParameter("userId"));
+            if (this.emitters.isUserOnline(userId)) {
+                User onlineUser = (User) DAO.getObjectById(userId, User.class);
+                ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                    resp.getWriter().write(objectMapper.writeValueAsString(onlineUser));
+                } catch (Exception e) {
+                    resp.setStatus(400);
+                    resp.getWriter().println(e.getMessage());
+                }
+                DAO.closeOpenedSession();
+            };
         }
     }
 

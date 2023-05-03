@@ -70,6 +70,10 @@ public class SSEEmittersRepository {
         }
     }
 
+    public boolean isUserOnline(long userId) {
+        return onlineUsers.containsKey(userId);
+    }
+
     public CopyOnWriteArrayList<AsyncContext> getEmittersList() {
         CopyOnWriteArrayList<AsyncContext> emittersList = new CopyOnWriteArrayList<>();
         // Add all the values from the map to the list
