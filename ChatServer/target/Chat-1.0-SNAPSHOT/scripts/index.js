@@ -57,6 +57,11 @@ $(document).ready(function() {
                 evtSource.close();
                 reconnectFunc();
             };
+
+            // Check if the user is online
+            setInterval(function () {
+                checkOnlineUsers();
+            }, 30000);
         }
 
         $('#send-message-button').click(function () {
@@ -80,6 +85,24 @@ $(document).ready(function() {
                 return false;
             }
         });
+
+        function checkOnlineUsers() {
+            $.ajax({
+                url: 'sse/chat-watch',
+                method: 'GET',
+                data: { checkOnlineUsers: 1 },
+                success: function (onlineUsers) {
+                    var parsedOnlineUsers = JSON.parse(onlineUsers);
+                    $.each(parsedOnlineUsers, function (key, value) {
+                        $("#online-users").append("<p id='" + value.userId + "'>" + " " + "<span id='" + value.userId + "'>" + value.name + "</span>")
+                            .scrollTop($('#chat-messages')[0].scrollHeight);
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        }
 
         // Setup Event Source in the very end, when everything is initialized
         setupEventSource();

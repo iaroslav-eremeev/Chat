@@ -43,6 +43,7 @@ $(document).ready(function() {
 
         function setupEventSource() {
             evtSource = new EventSource('sse/chat-watch');
+            checkOnlineUsers();
             evtSource.onmessage = function (e) {
                 var msg = JSON.parse(e.data);
                 $("#chat-messages").append("<p id='" + msg.user.userId + "'>" + " "
@@ -92,9 +93,9 @@ $(document).ready(function() {
                 method: 'GET',
                 data: { checkOnlineUsers: 1 },
                 success: function (onlineUsers) {
-                    $.each(onlineUsers, function (key, value) {
-                        $("#online-users").append("<p id='" + value.user.userId + "'>" + " "
-                            + "<span id='" + value.user.userId + "'>" + value.user.name + "</span>")
+                    var parsedOnlineUsers = JSON.parse(onlineUsers);
+                    $.each(parsedOnlineUsers, function (key, value) {
+                        $("#online-users").append("<p id='" + value.userId + "'>" + " " + "<span id='" + value.userId + "'>" + value.name + "</span>")
                             .scrollTop($('#chat-messages')[0].scrollHeight);
                     });
                 },
